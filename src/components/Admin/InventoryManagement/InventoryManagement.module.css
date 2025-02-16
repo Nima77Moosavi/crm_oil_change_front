@@ -16,12 +16,14 @@
   
   .formGroup {
     margin-bottom: 2rem;
+    margin-top: 1rem;
   }
   
   .input {
     width: 100%;
     padding: 10px;
     margin-bottom: 1rem;
+    margin-top: 1rem;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #fff;
@@ -31,7 +33,7 @@
   .button {
     width: 10%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #71a744;
     color: white;
     border: none;
     border-radius: 8px;
@@ -40,7 +42,7 @@
   }
   
   .button:hover {
-    background-color: #0056b3;
+    background-color: #71a744e1;
   }
   
   .servicesList {
