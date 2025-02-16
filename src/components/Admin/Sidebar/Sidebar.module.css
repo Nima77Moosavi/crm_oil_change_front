@@ -1,0 +1,49 @@
+/* Sidebar.module.css */
+
+.sidebar {
+  width: 20%;
+  background-color: #2c2c2c; /* Same as the login form background */
+  height: 100vh;
+  padding-top: 2rem;
+  direction: rtl;
+  font-family: 'IRANSans', sans-serif;
+  position: fixed;
+  top: 0;
+  right: 0; /* Make the sidebar stick to the right */
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3); /* Shadow on the left */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 1rem 0;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 1rem;
+  text-decoration: none;
+  color: #ddd;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.sidebar ul li a:hover {
+  background-color: #444; /* Same as the input background color */
+  color: #ffffff;
+}
+
+.sidebar ul li .active {
+  background-color: #007bff; /* Same as the button color */
+  color: white;
+}
+
+.sidebar ul li a:focus {
+  outline: none;
+}
