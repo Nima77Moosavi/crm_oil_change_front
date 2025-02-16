@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/login/", {
+      const response = await axios.post("https://crm-oil-change.liara.run/users/login/", {
         phone_number: phoneNumber,
         password: password,
       });

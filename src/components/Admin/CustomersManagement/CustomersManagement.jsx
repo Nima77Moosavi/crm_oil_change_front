@@ -15,7 +15,7 @@ const CustomersManagement = () => {
   // Fetch customers from API
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/crm/customers/")
+      .get("https://crm-oil-change.liara.run/crm/customers/")
       .then((response) => {
         setCustomers(response.data);
       })
@@ -27,7 +27,7 @@ const CustomersManagement = () => {
   // Create customer
   const handleCreateCustomer = () => {
     axios
-      .post("http://127.0.0.1:8000/crm/customers/", newCustomer)
+      .post("https://crm-oil-change.liara.run/crm/customers/", newCustomer)
       .then((response) => {
         setCustomers([...customers, response.data]);
         setNewCustomer({ name: "", phone: "" });
@@ -41,7 +41,7 @@ const CustomersManagement = () => {
   const handleUpdateCustomer = () => {
     axios
       .put(
-        `http://127.0.0.1:8000/crm/customers/${editingCustomer.id}/`,
+        `https://crm-oil-change.liara.run/crm/customers/${editingCustomer.id}/`,
         updatedCustomer
       )
       .then((response) => {
@@ -61,7 +61,7 @@ const CustomersManagement = () => {
   // Delete customer
   const handleDeleteCustomer = (id) => {
     axios
-      .delete(`http://127.0.0.1:8000/crm/customers/${id}/`)
+      .delete(`https://crm-oil-change.liara.run/crm/customers/${id}/`)
       .then(() => {
         setCustomers(customers.filter((c) => c.id !== id));
       })

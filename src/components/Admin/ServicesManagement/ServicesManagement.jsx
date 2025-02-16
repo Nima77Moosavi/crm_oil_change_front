@@ -20,7 +20,7 @@ const ServicesManagement = () => {
   // Fetch services from API
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/crm/services/")
+      .get("https://crm-oil-change.liara.run/crm/services/")
       .then((response) => {
         setServices(response.data);
       })
@@ -32,7 +32,7 @@ const ServicesManagement = () => {
   // Create service
   const handleCreateService = () => {
     axios
-      .post("http://127.0.0.1:8000/crm/services/", newService)
+      .post("https://crm-oil-change.liara.run/crm/services/", newService)
       .then((response) => {
         setServices([...services, response.data]);
         setNewService({ name: "", description: "", base_fee: "" });
@@ -46,7 +46,7 @@ const ServicesManagement = () => {
   const handleUpdateService = () => {
     axios
       .put(
-        `http://127.0.0.1:8000/crm/services/${editingService.id}/`,
+        `https://crm-oil-change.liara.run/crm/services/${editingService.id}/`,
         updatedService
       )
       .then((response) => {
@@ -65,7 +65,7 @@ const ServicesManagement = () => {
   // Delete service
   const handleDeleteService = (id) => {
     axios
-      .delete(`http://127.0.0.1:8000/crm/services/${id}/`)
+      .delete(`https://crm-oil-change.liara.run/crm/services/${id}/`)
       .then(() => {
         setServices(services.filter((service) => service.id !== id));
       })
