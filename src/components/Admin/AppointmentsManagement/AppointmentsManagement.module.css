@@ -14,6 +14,7 @@
 
 .formGroup {
   margin-bottom: 2rem;
+  margin-top: 1rem;
 }
 
 .input {
@@ -24,12 +25,14 @@
   border-radius: 8px;
   background-color: #fff;
   color: #333;
+  margin-top: 1rem;
+
 }
 
 .button {
   width: 10%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #71a744;
   color: white;
   border: none;
   border-radius: 8px;
@@ -38,7 +41,7 @@
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #71a744e1;
 }
 
 .appointmentsList {

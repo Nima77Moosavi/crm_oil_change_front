@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./ServicesManagement.module.css";
+import { MdDeleteForever } from "react-icons/md";
 
 const ServicesManagement = () => {
   const [services, setServices] = useState([]);
@@ -173,10 +174,10 @@ const ServicesManagement = () => {
               ویرایش
             </button>
             <button
-              className={styles.button}
+              className={`${styles.button} ${styles.deleteButton}`}
               onClick={() => handleDeleteService(service.id)}
             >
-              حذف
+              <MdDeleteForever />
             </button>
           </li>
         ))}
