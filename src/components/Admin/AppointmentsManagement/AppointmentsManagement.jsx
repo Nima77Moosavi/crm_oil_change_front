@@ -56,12 +56,12 @@ const AppointmentsManagement = () => {
 
   return (
     <div className={styles.mainContent}>
-      <h2 className={styles.title}>مدیریت نوبت‌ها</h2>
+      <h2 className={styles.title}> ثبت اطلاعات مشتری</h2>
       {error && <p className={styles.error}>{error}</p>}
 
       {/* Create Appointment Form */}
       <div className={styles.formGroup}>
-        <h3>افزودن نوبت جدید</h3>
+        <h4>نام مشتری</h4>
         <select
           className={styles.input}
           value={newAppointment.customer}
@@ -76,6 +76,7 @@ const AppointmentsManagement = () => {
             </option>
           ))}
         </select>
+        <h4>خدمات دریافتی </h4>
 
         <select
           multiple
@@ -94,6 +95,7 @@ const AppointmentsManagement = () => {
             </option>
           ))}
         </select>
+        <h4>صورت حساب </h4>
 
         <select
           multiple
@@ -112,6 +114,7 @@ const AppointmentsManagement = () => {
             </option>
           ))}
         </select>
+        <h4> تاریخ</h4>
 
         <input
           type="datetime-local"
@@ -123,12 +126,12 @@ const AppointmentsManagement = () => {
         />
 
         <button className={styles.button} onClick={handleCreateAppointment}>
-          ثبت نوبت
+          ثبت اطلاعات
         </button>
       </div>
 
       {/* Appointments List */}
-      <h3>لیست نوبت‌ها</h3>
+      <h3> تاریخچه</h3>
       <ul className={styles.appointmentsList}>
         {appointments.map((appt) => (
           <li key={appt.id} className={styles.appointmentItem}>

@@ -10,15 +10,19 @@
   font-size: 2rem;
   font-weight: bold;
   color: #333;
+  text-align: center;
 }
 
 .formGroup {
   margin-bottom: 2rem;
+  margin-top: 2rem;
   direction: rtl;
+  width: 50%;
 }
 
 .input {
   width: 100%;
+  display: block;
   padding: 10px;
   margin-bottom: 1rem;
   margin-top: 1rem;
@@ -30,7 +34,7 @@
 }
 
 .button {
-  width: 10%;
+  width: max-content;
   padding: 10px;
   background-color: #71a744;
   color: white;
@@ -62,4 +66,35 @@
 .error {
   color: red;
   margin-bottom: 1rem;
+}
+/* استایل‌های پلاک ماشین */
+.pelakContainer {
+  position: relative;
+  width: 500px; /* عرض عکس پلاک */
+  height: 150px; /* ارتفاع عکس پلاک */
+  margin: 0 auto 20px;
+}
+.inputsOverlay{
+  position: absolute;
+  top: 0px;
+  right:5px;
+}
+.pelak{
+  width: 100%;
+  margin-top: 20px;
+}
+
+.pelakInput {
+ width: 20%;
+ height:90px;
+ text-align: center;
+ font-size: 30px;
+}
+.lastPelakInput{
+  width: 20%;
+  height: 60px;
+  text-align: center;
+  font-size: 30px;
+  margin-left: 25px;
+  margin-top: 45px;
 }

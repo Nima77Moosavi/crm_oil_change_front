@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./CustomersManagement.module.css";
+import pelak from "../../../assets/pelak.jpg";
 
 const CustomersManagement = () => {
   const [customers, setCustomers] = useState([]);
@@ -78,6 +79,36 @@ const CustomersManagement = () => {
       {/* Create customer form */}
       <div className={styles.formGroup}>
         <h3>افزودن مشتری جدید</h3>
+        <div className={styles.pelakContainer}>
+          <img src={pelak} alt="پلاک ماشین" className={styles.pelak} />
+          <div className={styles.inputsOverlay}>
+          <input
+              type="text"
+              className={styles.lastPelakInput}
+              maxLength="2"
+              placeholder="۶۷"
+            />
+            <input
+              type="text"
+              className={styles.pelakInput}
+              maxLength="3"
+              placeholder="۱۲۲"
+            />
+            <input
+              type="text"
+              className={styles.pelakInput}
+              maxLength="1"
+              placeholder="ق"
+            />
+            <input
+              type="text"
+              className={styles.pelakInput}
+              maxLength="2"
+              placeholder="۶۷"
+            />
+            
+          </div>
+        </div>
         <input
           className={styles.input}
           type="text"
