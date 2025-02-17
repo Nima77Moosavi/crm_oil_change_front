@@ -18,22 +18,22 @@ const AppointmentsManagement = () => {
   // Fetch appointments
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/crm/appointments/")
+      .get("https://crm-oil-change.liara.run/crm/appointments/")
       .then((response) => setAppointments(response.data))
       .catch(() => setError("خطا در دریافت نوبت‌ها"));
 
     axios
-      .get("http://127.0.0.1:8000/crm/services/")
+      .get("https://crm-oil-change.liara.run/crm/services/")
       .then((response) => setServices(response.data))
       .catch(() => setError("خطا در دریافت سرویس‌ها"));
 
     axios
-      .get("http://127.0.0.1:8000/crm/inventory/")
+      .get("https://crm-oil-change.liara.run/crm/inventory/")
       .then((response) => setInventory(response.data))
       .catch(() => setError("خطا در دریافت موجودی"));
 
     axios
-      .get("http://127.0.0.1:8000/crm/customers/")
+      .get("https://crm-oil-change.liara.run/crm/customers/")
       .then((response) => setCustomers(response.data))
       .catch(() => setError("خطا در دریافت مشتریان"));
   }, []);
@@ -41,7 +41,7 @@ const AppointmentsManagement = () => {
   // Handle appointment creation
   const handleCreateAppointment = () => {
     axios
-      .post("http://127.0.0.1:8000/crm/appointments/", newAppointment)
+      .post("https://crm-oil-change.liara.run/crm/appointments/", newAppointment)
       .then((response) => {
         setAppointments([...appointments, response.data]);
         setNewAppointment({

@@ -12,7 +12,7 @@ const InventoryManagement = () => {
   // Fetch inventory items from API
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/crm/inventories/")
+      .get("https://crm-oil-change.liara.run/crm/inventories/")
       .then((response) => {
         setInventoryItems(response.data);
       })
@@ -24,7 +24,7 @@ const InventoryManagement = () => {
   // Create inventory item
   const handleCreateItem = () => {
     axios
-      .post("http://127.0.0.1:8000/crm/inventory/", newItem)
+      .post("https://crm-oil-change.liara.run/crm/inventory/", newItem)
       .then((response) => {
         setInventoryItems([...inventoryItems, response.data]);
         setNewItem({ name: "", price: "" });
@@ -38,7 +38,7 @@ const InventoryManagement = () => {
   const handleUpdateItem = () => {
     axios
       .put(
-        `http://127.0.0.1:8000/crm/inventory/${editingItem.id}/`,
+        `https://crm-oil-change.liara.run/crm/inventory/${editingItem.id}/`,
         updatedItem
       )
       .then((response) => {
@@ -57,7 +57,7 @@ const InventoryManagement = () => {
   // Delete inventory item
   const handleDeleteItem = (id) => {
     axios
-      .delete(`http://127.0.0.1:8000/crm/inventory/${id}/`)
+      .delete(`https://crm-oil-change.liara.run/crm/inventory/${id}/`)
       .then(() => {
         setInventoryItems(inventoryItems.filter((item) => item.id !== id));
       })

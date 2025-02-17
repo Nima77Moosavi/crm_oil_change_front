@@ -4,18 +4,15 @@ import styles from "./CustomersManagement.module.css";
 
 const CustomersManagement = () => {
   const [customers, setCustomers] = useState([]);
-  const [newCustomer, setNewCustomer] = useState({ name: "", phone: "" });
+  const [newCustomer, setNewCustomer] = useState({ phone_number: "" });
   const [editingCustomer, setEditingCustomer] = useState(null);
-  const [updatedCustomer, setUpdatedCustomer] = useState({
-    name: "",
-    phone: "",
-  });
+  const [updatedCustomer, setUpdatedCustomer] = useState({ phone_number: "" });
   const [error, setError] = useState(null);
 
   // Fetch customers from API
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/crm/customers/")
+      .get("https://crm-oil-change.liara.run/crm/customers/")
       .then((response) => {
         setCustomers(response.data);
       })
@@ -27,10 +24,10 @@ const CustomersManagement = () => {
   // Create customer
   const handleCreateCustomer = () => {
     axios
-      .post("http://127.0.0.1:8000/crm/customers/", newCustomer)
+      .post("https://crm-oil-change.liara.run/crm/customers/", newCustomer)
       .then((response) => {
         setCustomers([...customers, response.data]);
-        setNewCustomer({ name: "", phone: "" });
+        setNewCustomer({ phone_number: "" });
       })
       .catch(() => {
         setError("خطا در ایجاد مشتری");
@@ -41,7 +38,7 @@ const CustomersManagement = () => {
   const handleUpdateCustomer = () => {
     axios
       .put(
-        `http://127.0.0.1:8000/crm/customers/${editingCustomer.id}/`,
+        `https://crm-oil-change.liara.run/crm/customers/${editingCustomer.id}/`,
         updatedCustomer
       )
       .then((response) => {
@@ -51,7 +48,7 @@ const CustomersManagement = () => {
           )
         );
         setEditingCustomer(null);
-        setUpdatedCustomer({ name: "", phone: "" });
+        setUpdatedCustomer({ phone_number: "" });
       })
       .catch(() => {
         setError("خطا در ویرایش مشتری");
@@ -61,7 +58,7 @@ const CustomersManagement = () => {
   // Delete customer
   const handleDeleteCustomer = (id) => {
     axios
-      .delete(`http://127.0.0.1:8000/crm/customers/${id}/`)
+      .delete(`https://crm-oil-change.liara.run/crm/customers/${id}/`)
       .then(() => {
         setCustomers(customers.filter((c) => c.id !== id));
       })
@@ -80,19 +77,10 @@ const CustomersManagement = () => {
         <h3>افزودن مشتری جدید</h3>
         <input
           className={styles.input}
-          type="text"
-          value={newCustomer.name}
-          onChange={(e) =>
-            setNewCustomer({ ...newCustomer, name: e.target.value })
-          }
-          placeholder="نام مشتری"
-        />
-        <input
-          className={styles.input}
           type="tel"
-          value={newCustomer.phone}
+          value={newCustomer.phone_number}
           onChange={(e) =>
-            setNewCustomer({ ...newCustomer, phone: e.target.value })
+            setNewCustomer({ ...newCustomer, phone_number: e.target.value })
           }
           placeholder="شماره تلفن"
         />
@@ -107,19 +95,13 @@ const CustomersManagement = () => {
           <h3>ویرایش مشتری</h3>
           <input
             className={styles.input}
-            type="text"
-            value={updatedCustomer.name}
-            onChange={(e) =>
-              setUpdatedCustomer({ ...updatedCustomer, name: e.target.value })
-            }
-            placeholder="نام مشتری"
-          />
-          <input
-            className={styles.input}
             type="tel"
-            value={updatedCustomer.phone}
+            value={updatedCustomer.phone_number}
             onChange={(e) =>
-              setUpdatedCustomer({ ...updatedCustomer, phone: e.target.value })
+              setUpdatedCustomer({
+                ...updatedCustomer,
+                phone_number: e.target.value,
+              })
             }
             placeholder="شماره تلفن"
           />
@@ -134,17 +116,12 @@ const CustomersManagement = () => {
       <ul className={styles.customersList}>
         {customers.map((customer) => (
           <li key={customer.id} className={styles.customerItem}>
-            <span>
-              {customer.name} - {customer.phone}
-            </span>
+            <span>{customer.phone_number}</span>
             <button
               className={`${styles.button} ${styles.editButton}`}
               onClick={() => {
                 setEditingCustomer(customer);
-                setUpdatedCustomer({
-                  name: customer.name,
-                  phone: customer.phone,
-                });
+                setUpdatedCustomer({ phone_number: customer.phone_number });
               }}
             >
               ویرایش
