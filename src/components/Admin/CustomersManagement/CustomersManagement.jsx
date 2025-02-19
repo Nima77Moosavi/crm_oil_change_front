@@ -2,14 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./CustomersManagement.module.css";
 import pelak from "../../../assets/pelak.jpg";
+import { MdDeleteForever } from "react-icons/md";
 
 const CustomersManagement = () => {
   const [customers, setCustomers] = useState([]);
-  const [newCustomer, setNewCustomer] = useState({ name: "", phone: "" });
+  const [newCustomer, setNewCustomer] = useState({
+    vehicle_number: "",
+    name: "",
+    info: "",
+    phone_mumber: "",
+  });
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [updatedCustomer, setUpdatedCustomer] = useState({
+    vehicle_number: "",
     name: "",
-    phone: "",
+    info: "",
+    phone_number: "",
   });
   const [error, setError] = useState(null);
 
@@ -27,11 +35,21 @@ const CustomersManagement = () => {
 
   // Create customer
   const handleCreateCustomer = () => {
+    const pelakString = `${pelakValues.part1}${pelakValues.part2}${pelakValues.part3}${pelakValues.part4}`;
     axios
-      .post("https://crm-oil-change.liara.run/crm/customers/", newCustomer)
+      .post("https://crm-oil-change.liara.run/crm/customers/", {
+        ...newCustomer,
+        vehicle_number: pelakString,
+      })
       .then((response) => {
         setCustomers([...customers, response.data]);
-        setNewCustomer({ name: "", phone: "" });
+        setNewCustomer({
+          vehicle_number: "",
+          name: "",
+          info: "",
+          phone_number: "",
+        });
+        setPelakValues({ part1: "", part2: "", part3: "", part4: "" }); // ریست کردن فیلدهای پلاک
       })
       .catch(() => {
         setError("خطا در ایجاد مشتری");
@@ -52,7 +70,12 @@ const CustomersManagement = () => {
           )
         );
         setEditingCustomer(null);
-        setUpdatedCustomer({ name: "", phone: "" });
+        setUpdatedCustomer({
+          vehicle_number: "",
+          name: "",
+          info: "",
+          phone_number: "",
+        });
       })
       .catch(() => {
         setError("خطا در ویرایش مشتری");
@@ -71,6 +94,18 @@ const CustomersManagement = () => {
       });
   };
 
+  const [pelakValues, setPelakValues] = useState({
+    part1: "", // قسمت اول پلاک (۲ رقم)
+    part2: "", // قسمت دوم پلاک (۳ رقم)
+    part3: "", // قسمت سوم پلاک (۱ حرف)
+    part4: "", // قسمت چهارم پلاک (۲ رقم)
+  });
+  const handlePelakChange = (part, value) => {
+    setPelakValues({
+      ...pelakValues,
+      [part]: value,
+    });
+  };
   return (
     <div className={styles.mainContent}>
       <h2 className={styles.title}>مدیریت مشتریان</h2>
@@ -82,31 +117,38 @@ const CustomersManagement = () => {
         <div className={styles.pelakContainer}>
           <img src={pelak} alt="پلاک ماشین" className={styles.pelak} />
           <div className={styles.inputsOverlay}>
-          <input
+            <input
               type="text"
               className={styles.lastPelakInput}
               maxLength="2"
               placeholder="۶۷"
+              value={pelakValues.part1}
+              onChange={(e) => handlePelakChange("part1", e.target.value)}
             />
             <input
               type="text"
               className={styles.pelakInput}
               maxLength="3"
               placeholder="۱۲۲"
+              value={pelakValues.part2}
+              onChange={(e) => handlePelakChange("part2", e.target.value)}
             />
             <input
               type="text"
               className={styles.pelakInput}
               maxLength="1"
               placeholder="ق"
+              value={pelakValues.part3}
+              onChange={(e) => handlePelakChange("part3", e.target.value)}
             />
             <input
               type="text"
               className={styles.pelakInput}
               maxLength="2"
               placeholder="۶۷"
+              value={pelakValues.part4}
+              onChange={(e) => handlePelakChange("part4", e.target.value)}
             />
-            
           </div>
         </div>
         <input
@@ -119,11 +161,21 @@ const CustomersManagement = () => {
           placeholder="نام مشتری"
         />
         <input
+          multiple
+          className={styles.input}
+          type="text"
+          value={newCustomer.info}
+          onChange={(e) =>
+            setNewCustomer({ ...newCustomer, info: e.target.value })
+          }
+          placeholder="اطلاعات "
+        />
+        <input
           className={styles.input}
           type="tel"
-          value={newCustomer.phone}
+          value={newCustomer.phone_number}
           onChange={(e) =>
-            setNewCustomer({ ...newCustomer, phone: e.target.value })
+            setNewCustomer({ ...newCustomer, phone_number: e.target.value })
           }
           placeholder="شماره تلفن"
         />
@@ -146,11 +198,24 @@ const CustomersManagement = () => {
             placeholder="نام مشتری"
           />
           <input
+            multiple
+            className={styles.input}
+            type="text"
+            value={newCustomer.info}
+            onChange={(e) =>
+              setNewCustomer({ ...newCustomer, info: e.target.value })
+            }
+            placeholder="اطلاعات "
+          />
+          <input
             className={styles.input}
             type="tel"
-            value={updatedCustomer.phone}
+            value={updatedCustomer.phone_number}
             onChange={(e) =>
-              setUpdatedCustomer({ ...updatedCustomer, phone: e.target.value })
+              setUpdatedCustomer({
+                ...updatedCustomer,
+                phone_number: e.target.value,
+              })
             }
             placeholder="شماره تلفن"
           />
@@ -163,28 +228,37 @@ const CustomersManagement = () => {
       {/* Customers List */}
       <h3>لیست مشتریان</h3>
       <ul className={styles.customersList}>
+        <li className={styles.customerItem}>
+          <span>نام مشتری</span>
+          <span>شماره تماس</span>
+          <span>پلاک</span>
+          <span></span>
+        </li>
         {customers.map((customer) => (
           <li key={customer.id} className={styles.customerItem}>
-            <span>
-              {customer.name} - {customer.phone}
-            </span>
+            <span>{customer.name}</span>
+            <span>{customer.phone_number}</span>
+            <span>{customer.vehicle_number}</span>
+            <span></span>
             <button
               className={`${styles.button} ${styles.editButton}`}
               onClick={() => {
                 setEditingCustomer(customer);
                 setUpdatedCustomer({
+                  vehicle_number: customer.vehicle_number,
                   name: customer.name,
-                  phone: customer.phone,
+                  info: customer.info,
+                  phone_number: customer.phone_number,
                 });
               }}
             >
               ویرایش
             </button>
             <button
-              className={styles.button}
+              className={`${styles.button} ${styles.deleteButton}`}
               onClick={() => handleDeleteCustomer(customer.id)}
             >
-              حذف
+              <MdDeleteForever />
             </button>
           </li>
         ))}
