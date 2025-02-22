@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styles from "./CustomersManagement.module.css";
 import pelak from "../../../assets/pelak.jpg";
@@ -10,7 +10,7 @@ const CustomersManagement = () => {
     vehicle_number: "",
     name: "",
     info: "",
-    phone_mumber: "",
+    phone_number: "",
   });
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [updatedCustomer, setUpdatedCustomer] = useState({
@@ -20,6 +20,35 @@ const CustomersManagement = () => {
     phone_number: "",
   });
   const [error, setError] = useState(null);
+
+  const [pelakValues, setPelakValues] = useState({
+    part1: "", // قسمت اول پلاک (۲ رقم)
+    part2: "", // قسمت دوم پلاک (۱ حرف)
+    part3: "", // قسمت سوم پلاک (۳ رقم)
+    part4: "", // قسمت چهارم پلاک (۲ رقم)
+  });
+
+  // ایجاد ref برای هر فیلد پلاک
+  const part1Ref = useRef(null);
+  const part2Ref = useRef(null);
+  const part3Ref = useRef(null);
+  const part4Ref = useRef(null);
+
+  const handlePelakChange = (part, value) => {
+    setPelakValues({
+      ...pelakValues,
+      [part]: value,
+    });
+
+    // انتقال فوکوس به فیلد بعدی
+    if (part === "part1" && value.length === 2) {
+      part2Ref.current.focus();
+    } else if (part === "part2" && value.length === 1) {
+      part3Ref.current.focus();
+    } else if (part === "part3" && value.length === 3) {
+      part4Ref.current.focus();
+    }
+  };
 
   // Fetch customers from API
   useEffect(() => {
@@ -35,7 +64,7 @@ const CustomersManagement = () => {
 
   // Create customer
   const handleCreateCustomer = () => {
-    const pelakString = `${pelakValues.part1}${pelakValues.part2}${pelakValues.part3}${pelakValues.part4}`;
+    const pelakString = `${pelakValues.part3}${pelakValues.part4}${pelakValues.part2}${pelakValues.part1}`;
     axios
       .post("https://crm-oil-change.liara.run/crm/customers/", {
         ...newCustomer,
@@ -49,7 +78,7 @@ const CustomersManagement = () => {
           info: "",
           phone_number: "",
         });
-        setPelakValues({ part1: "", part2: "", part3: "", part4: "" }); // ریست کردن فیلدهای پلاک
+        setPelakValues({ part4: "", part3: "", part2: "", part1: "" }); // ریست کردن فیلدهای پلاک
       })
       .catch(() => {
         setError("خطا در ایجاد مشتری");
@@ -94,18 +123,6 @@ const CustomersManagement = () => {
       });
   };
 
-  const [pelakValues, setPelakValues] = useState({
-    part1: "", // قسمت اول پلاک (۲ رقم)
-    part2: "", // قسمت دوم پلاک (۳ رقم)
-    part3: "", // قسمت سوم پلاک (۱ حرف)
-    part4: "", // قسمت چهارم پلاک (۲ رقم)
-  });
-  const handlePelakChange = (part, value) => {
-    setPelakValues({
-      ...pelakValues,
-      [part]: value,
-    });
-  };
   return (
     <div className={styles.mainContent}>
       <h2 className={styles.title}>مدیریت مشتریان</h2>
@@ -121,33 +138,37 @@ const CustomersManagement = () => {
               type="text"
               className={styles.lastPelakInput}
               maxLength="2"
-              placeholder="۶۷"
-              value={pelakValues.part1}
-              onChange={(e) => handlePelakChange("part1", e.target.value)}
+              placeholder="۶۲"
+              value={pelakValues.part4}
+              onChange={(e) => handlePelakChange("part4", e.target.value)}
+              ref={part4Ref}
             />
             <input
               type="text"
               className={styles.pelakInput}
               maxLength="3"
               placeholder="۱۲۲"
-              value={pelakValues.part2}
-              onChange={(e) => handlePelakChange("part2", e.target.value)}
+              value={pelakValues.part3}
+              onChange={(e) => handlePelakChange("part3", e.target.value)}
+              ref={part3Ref}
             />
             <input
               type="text"
               className={styles.pelakInput}
               maxLength="1"
               placeholder="ق"
-              value={pelakValues.part3}
-              onChange={(e) => handlePelakChange("part3", e.target.value)}
+              value={pelakValues.part2}
+              onChange={(e) => handlePelakChange("part2", e.target.value)}
+              ref={part2Ref}
             />
             <input
               type="text"
               className={styles.pelakInput}
               maxLength="2"
               placeholder="۶۷"
-              value={pelakValues.part4}
-              onChange={(e) => handlePelakChange("part4", e.target.value)}
+              value={pelakValues.part1}
+              onChange={(e) => handlePelakChange("part1", e.target.value)}
+              ref={part1Ref}
             />
           </div>
         </div>
@@ -228,18 +249,20 @@ const CustomersManagement = () => {
       {/* Customers List */}
       <h3>لیست مشتریان</h3>
       <ul className={styles.customersList}>
-        <li className={styles.customerItem}>
+        <li className={styles.customerTitle}>
           <span>نام مشتری</span>
           <span>شماره تماس</span>
           <span>پلاک</span>
-          <span></span>
         </li>
         {customers.map((customer) => (
           <li key={customer.id} className={styles.customerItem}>
             <span>{customer.name}</span>
             <span>{customer.phone_number}</span>
-            <span>{customer.vehicle_number}</span>
-            <span></span>
+            <span>
+  {customer.vehicle_number.length >= 1
+    ? `${customer.vehicle_number.slice(0, 3)}-${customer.vehicle_number.slice(3)}`
+    : customer.vehicle_number}
+</span>
             <button
               className={`${styles.button} ${styles.editButton}`}
               onClick={() => {
