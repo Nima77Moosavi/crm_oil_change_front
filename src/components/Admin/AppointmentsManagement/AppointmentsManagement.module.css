@@ -26,11 +26,11 @@
   background-color: #fff;
   color: #333;
   margin-top: 1rem;
-
+  direction: rtl;
 }
 
 .button {
-  width: 10%;
+  width: max-content;
   padding: 10px;
   background-color: #71a744;
   color: white;

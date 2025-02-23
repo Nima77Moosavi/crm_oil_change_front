@@ -48,18 +48,19 @@
 .servicesList {
   list-style-type: none;
   padding: 0;
+  margin-top: 10px;
 }
 
 .serviceItem {
   background-color: #fff;
-  padding: 1rem;
-  margin-bottom: 1rem;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
+.serviceItem span{
+  width: 25%;
+}
 .serviceItem button {
   margin-left: 0.5rem;
 }
@@ -71,8 +72,15 @@
 .editButton{
   background-color: #fa944b;
 }
+.editButton:hover{
+  background-color: #fa944bd2;
+}
 .deleteButton{
  color: #fa4e4b;
  background-color: unset;
  font-size: 35px;
+}
+.deleteButton:hover{
+  color: #fa4e4bd2;
+  background-color: unset;
 }
