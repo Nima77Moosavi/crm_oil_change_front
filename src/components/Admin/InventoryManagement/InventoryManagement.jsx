@@ -24,7 +24,7 @@ const InventoryManagement = () => {
   // Create inventory item
   const handleCreateItem = () => {
     axios
-      .post("https://crm-oil-change.liara.run/crm/inventory/", newItem)
+      .post("https://crm-oil-change.liara.run/crm/inventories/", newItem)
       .then((response) => {
         setInventoryItems([...inventoryItems, response.data]);
         setNewItem({ name: "", price: "" });
@@ -38,7 +38,7 @@ const InventoryManagement = () => {
   const handleUpdateItem = () => {
     axios
       .put(
-        `https://crm-oil-change.liara.run/crm/inventory/${editingItem.id}/`,
+        `https://crm-oil-change.liara.run/crm/inventories/${editingItem.id}/`,
         updatedItem
       )
       .then((response) => {
@@ -57,7 +57,7 @@ const InventoryManagement = () => {
   // Delete inventory item
   const handleDeleteItem = (id) => {
     axios
-      .delete(`https://crm-oil-change.liara.run/crm/inventory/${id}/`)
+      .delete(`https://crm-oil-change.liara.run/crm/inventories/${id}/`)
       .then(() => {
         setInventoryItems(inventoryItems.filter((item) => item.id !== id));
       })
