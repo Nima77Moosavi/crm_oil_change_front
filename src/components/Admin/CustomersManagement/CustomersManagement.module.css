@@ -63,7 +63,24 @@
   align-items: center;
 }
 .customerItem span{
-  width: 60%;
+  width: 20%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  direction: rtl;
+}
+.customerTitle{
+  background-color: #fff;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+.customerTitle span{
+  width: 25%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }
 .error {
   color: red;
