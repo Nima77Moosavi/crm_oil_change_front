@@ -68,6 +68,18 @@ const CustomersManagement = () => {
       });
   };
 
+  const [pelakValues, setPelakValues] = useState({
+    part1: "", // قسمت اول پلاک (۲ رقم)
+    part2: "", // قسمت دوم پلاک (۳ رقم)
+    part3: "", // قسمت سوم پلاک (۱ حرف)
+    part4: "", // قسمت چهارم پلاک (۲ رقم)
+  });
+  const handlePelakChange = (part, value) => {
+    setPelakValues({
+      ...pelakValues,
+      [part]: value,
+    });
+  };
   return (
     <div className={styles.mainContent}>
       <h2 className={styles.title}>مدیریت مشتریان</h2>
