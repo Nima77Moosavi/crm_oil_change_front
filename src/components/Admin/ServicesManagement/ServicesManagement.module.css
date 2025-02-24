@@ -60,6 +60,7 @@
 }
 .serviceItem span{
   width: 25%;
+  text-align: center;
 }
 .serviceItem button {
   margin-left: 0.5rem;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./InventoryManagement.module.css";
+import { MdDeleteForever } from "react-icons/md";
 
 const InventoryManagement = () => {
   const [inventoryItems, setInventoryItems] = useState([]);
@@ -141,10 +142,10 @@ const InventoryManagement = () => {
               ویرایش
             </button>
             <button
-              className={styles.button}
+              className={`${styles.button} ${styles.deleteButton}`}
               onClick={() => handleDeleteItem(item.id)}
             >
-              حذف
+              <MdDeleteForever />
             </button>
           </li>
         ))}
