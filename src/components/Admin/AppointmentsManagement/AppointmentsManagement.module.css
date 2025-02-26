@@ -10,6 +10,7 @@
   font-size: 2rem;
   font-weight: bold;
   color: #333;
+  text-align: center;
 }
 
 .formGroup {
@@ -18,7 +19,7 @@
 }
 
 .input {
-  width: 100%;
+  width: 35%;
   padding: 10px;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
@@ -28,9 +29,15 @@
   margin-top: 1rem;
   direction: rtl;
 }
+/* تغییر رنگ متن گزینه‌های لیست هنگام هاور */
+.input option:hover {
+  background-color: #4caf50; /* پس‌زمینه سبز */
+  color: white; /* متن سفید */
+}
 
 .button {
   width: max-content;
+  display: block;
   padding: 10px;
   background-color: #71a744;
   color: white;
@@ -62,4 +69,142 @@
 .error {
   color: red;
   margin-bottom: 1rem;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column; /* چک‌باکس‌ها را به صورت عمودی نمایش می‌دهد */
+  gap: 10px; /* فاصله بین چک‌باکس‌ها */
+  margin: 20px;
+  }
+.checkboxLabel {
+  display: flex;
+  align-items: center; /* متن و چک‌باکس را در یک خط قرار می‌دهد */
+  gap: 8px; /* فاصله بین چک‌باکس و متن */
+}
+
+.checkboxLabel input {
+  margin: 0; /* حاشیه پیش‌فرض چک‌باکس را حذف می‌کند */
+}
+.checkboxLabel input[type="checkbox"] {
+  appearance: none; /* مخفی کردن چک‌باکس پیش‌فرض */
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc; /* حاشیه خاکستری */
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  margin-left: 5px;
+}
+
+.checkboxLabel input[type="checkbox"]:checked {
+  background-color: #71a744; /* رنگ پس‌زمینه سبز */
+  border-color: #71a744; /* رنگ حاشیه سبز */
+}
+
+.checkboxLabel input[type="checkbox"]:checked::after {
+  content: "✔"; /* تیک */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: white; /* رنگ تیک سفید */
+}
+
+
+.receiptContainer {
+  background: #fff;
+  border: 2px dashed #000;
+  padding: 16px;
+  width: 350px;
+  margin: 20px auto;
+  font-family: "Tahoma", sans-serif;
+  text-align: center;
+  margin-right: 0;
+}
+
+.receiptHeader {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.receiptItems {
+  list-style: none;
+  padding: 0;
+  text-align: right;
+}
+
+.receiptItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  padding: 4px 0;
+  border-bottom: 1px dashed #ccc;
+}
+
+.receiptTotal {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  padding-top: 5px;
+  border-top: 2px solid #000;
+}
+.customerInfo {
+  display: flex;
+  justify-content: space-between; /* فاصله بین نام مشتری و تاریخ */
+  align-items: center; /* وسط‌چین عمودی */
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.customerName {
+  font-size: 14px;
+  color: #666;
+}
+
+.jalaliDate {
+  font-size: 14px;
+  color: #666;
+}
+
+.printButton {
+  background-color: #fab976; /* رنگ سبز */
+  color: #031927;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: block; /* نمایش به صورت بلوکی */
+  margin-left: auto; /* وسط‌چین افقی */
+  margin-right: auto; /* وسط‌چین افقی */
+}
+
+.printButton:hover {
+  background-color: #f7ab5f; /* رنگ سبز تیره هنگام هاور */
+}
+@media print {
+  body * {
+    visibility: hidden; /* مخفی کردن همه عناصر */
+  }
+
+  .receiptContainer,
+  .receiptContainer * {
+    visibility: visible; /* نمایش فقط بخش فاکتور */
+  }
+
+  .receiptContainer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .printButton {
+    display: none; /* مخفی کردن دکمه چاپ در حالت چاپ */
+  }
 }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./AppointmentsManagement.module.css";
+import { toJalaali } from "jalaali-js";
+import { TiPrinter } from "react-icons/ti";
 
 const AppointmentsManagement = () => {
   const [appointments, setAppointments] = useState([]);
@@ -14,6 +16,23 @@ const AppointmentsManagement = () => {
     date_time: "",
   });
   const [error, setError] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState(null); // برای نمایش جزئیات فاکتور
+
+  // تابع کمکی برای فرمت‌کردن قیمت
+  const formatPrice = (price) => {
+    return price?.toLocaleString() || "۰"; // اگر قیمت undefined یا null بود، "۰" برگردان
+  };
+
+  // تابع کمکی برای تبدیل تاریخ به شمسی
+  const formatJalaliDate = (date) => {
+    const currentDate = new Date(date);
+    const jalaliDate = toJalaali(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      currentDate.getDate()
+    );
+    return `${jalaliDate.jy}/${jalaliDate.jm}/${jalaliDate.jd}`;
+  };
 
   // Fetch appointments
   useEffect(() => {
@@ -55,31 +74,68 @@ const AppointmentsManagement = () => {
         });
       })
       .catch(() => setError("خطا در ایجاد نوبت"));
-      console.log(newAppointment.services);
-      
   };
 
-  // Calculate total cost
+  // Handle service selection
+  const handleServiceChange = (e) => {
+    const serviceId = Number(e.target.value);
+    const isChecked = e.target.checked;
+
+    setNewAppointment((prev) => {
+      if (isChecked) {
+        return { ...prev, services: [...prev.services, serviceId] };
+      } else {
+        return {
+          ...prev,
+          services: prev.services.filter((id) => id !== serviceId),
+        };
+      }
+    });
+  };
+
+  // Handle item selection
+  const handleItemChange = (e) => {
+    const itemId = Number(e.target.value);
+    const isChecked = e.target.checked;
+
+    setNewAppointment((prev) => {
+      if (isChecked) {
+        return { ...prev, items_used: [...prev.items_used, itemId] };
+      } else {
+        return {
+          ...prev,
+          items_used: prev.items_used.filter((id) => id !== itemId),
+        };
+      }
+    });
+  };
+
+  // محاسبه مجموع هزینه
   const calculateTotalCost = () => {
     let total = 0;
 
-    // Calculate cost of selected services
+    // محاسبه هزینه خدمات انتخاب شده
     newAppointment.services.forEach((serviceId) => {
       const service = services.find((s) => s.id === serviceId);
       if (service) {
-        total += service.base_fee;
+        total += parseFloat(service.base_fee);
       }
     });
 
-    // Calculate cost of selected items
+    // محاسبه هزینه محصولات استفاده شده
     newAppointment.items_used.forEach((itemId) => {
       const item = inventories.find((i) => i.id === itemId);
       if (item) {
-        total += item.price;
+        total += parseFloat(item.price);
       }
     });
 
     return total;
+  };
+
+  // نمایش جزئیات فاکتور
+  const handleShowDetails = (appt) => {
+    setSelectedAppointment(appt);
   };
 
   return (
@@ -99,80 +155,88 @@ const AppointmentsManagement = () => {
         >
           <option value="">انتخاب مشتری</option>
           {customers.map((c) => (
-            <option key={c.id} value={c.id}>
+            <option key={c.id} value={c.id} >
               {c.name}
             </option>
           ))}
         </select>
 
         <h4>خدمات دریافتی</h4>
-        <select
-          multiple
-          className={styles.input}
-          value={newAppointment.services}
-          onChange={(e) =>
-            setNewAppointment({
-              ...newAppointment,
-              services: [...e.target.selectedOptions].map((o) => o.value),
-            })
-          }
-        >
+        <div className={styles.checkboxGroup}>
           {services.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name} - {s.base_fee} تومان
-            </option>
+            <label key={s.id} className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                value={s.id}
+                checked={newAppointment.services.includes(s.id)}
+                onChange={handleServiceChange}
+              />
+              {s.name} - {formatPrice(s.base_fee)} تومان
+            </label>
           ))}
-        </select>
+        </div>
 
         <h4>محصولات استفاده شده</h4>
-        <select
-          multiple
-          className={styles.input}
-          value={newAppointment.items_used}
-          onChange={(e) =>
-            setNewAppointment({
-              ...newAppointment,
-              items_used: [...e.target.selectedOptions].map((o) => o.value),
-            })
-          }
-        >
+        <div className={styles.checkboxGroup}>
           {inventories.map((i) => (
-            <option key={i.id} value={i.id}>
-              {i.name} - {i.price} تومان
-            </option>
+            <label key={i.id} className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                value={i.id}
+                checked={newAppointment.items_used.includes(i.id)}
+                onChange={handleItemChange}
+              />
+              {i.name} - {formatPrice(i.price)} تومان
+            </label>
           ))}
-        </select>
+        </div>
 
-        <h4>صورت حساب</h4>
-        <div className={styles.invoice}>
-          <h5>خدمات انتخاب شده:</h5>
-          <ul>
+        <h5 className={styles.receiptHeader}>فیش صورت‌حساب</h5>
+        <div className={styles.receiptContainer}>
+          <div className={styles.receiptHeader}>فاکتور فروش</div>
+
+          {/* نمایش نام مشتری و تاریخ شمسی */}
+          <div className={styles.customerInfo}>
+            <span className={styles.customerName}>
+              مشتری:{" "}
+              {customers.find((c) => c.id === Number(newAppointment.customer))?.name || "نامشخص"}
+            </span>
+            <span className={styles.jalaliDate}>
+              تاریخ: {formatJalaliDate(new Date())}
+            </span>
+          </div>
+
+          <ul className={styles.receiptItems}>
             {newAppointment.services.map((serviceId) => {
-
               const service = services.find((s) => s.id === serviceId);
-
               return (
-                <li key={serviceId}>
-                  {service?.name} - {service?.base_fee} تومان
+                <li key={`service-${serviceId}`} className={styles.receiptItem}>
+                  <span>{service?.name}</span>
+                  <span>{formatPrice(service?.base_fee)} تومان</span>
                 </li>
               );
             })}
-          </ul>
 
-          <h5>محصولات انتخاب شده:</h5>
-          <ul>
             {newAppointment.items_used.map((itemId) => {
               const item = inventories.find((i) => i.id === itemId);
               return (
-                <li key={itemId}>
-                  {item?.name} - {item?.price} تومان
+                <li key={`item-${itemId}`} className={styles.receiptItem}>
+                  <span>{item?.name}</span>
+                  <span>{formatPrice(item?.price)} تومان</span>
                 </li>
               );
             })}
           </ul>
 
-          <h5>مجموع هزینه:</h5>
-          <p>{calculateTotalCost()} تومان</p>
+          <div className={styles.receiptTotal}>
+            <span>مجموع هزینه:&nbsp;</span>
+            <span>{formatPrice(calculateTotalCost())} تومان</span>
+          </div>
+
+          {/* دکمه چاپ فاکتور */}
+          <button className={styles.printButton} onClick={() => window.print()}>
+            چاپ فاکتور <TiPrinter />
+          </button>
         </div>
 
         <h4>تاریخ</h4>
@@ -196,12 +260,59 @@ const AppointmentsManagement = () => {
         {appointments.map((appt) => (
           <li key={appt.id} className={styles.appointmentItem}>
             <span>
-              {appt.customer} - {appt.date_time}
+              {appt.customer} - {formatJalaliDate(appt.date_time)} -{" "}
+              {formatPrice(appt.total_cost)} تومان
             </span>
-            <span>{appt.total_cost} تومان</span>
+            <button
+              className={styles.detailsButton}
+              onClick={() => handleShowDetails(appt)}
+            >
+              نمایش جزئیات
+            </button>
           </li>
         ))}
       </ul>
+
+      {/* نمایش جزئیات فاکتور انتخاب شده */}
+      {selectedAppointment && (
+        <div className={styles.detailsModal}>
+          <h4>جزئیات فاکتور</h4>
+          <p>
+            مشتری:{" "}
+            {customers.find((c) => c.id === Number(newAppointment.customer))?.name || "نامشخص"}
+          </p>
+          <p>تاریخ: {formatJalaliDate(selectedAppointment.date_time)}</p>
+          <p>مجموع هزینه: {formatPrice(selectedAppointment.total_cost)} تومان</p>
+          <h5>خدمات دریافتی:</h5>
+          <ul>
+            {selectedAppointment.services.map((serviceId) => {
+              const service = services.find((s) => s.id === serviceId);
+              return (
+                <li key={`service-${serviceId}`}>
+                  {service?.name} - {formatPrice(service?.base_fee)} تومان
+                </li>
+              );
+            })}
+          </ul>
+          <h5>محصولات استفاده شده:</h5>
+          <ul>
+            {selectedAppointment.items_used.map((itemId) => {
+              const item = inventories.find((i) => i.id === itemId);
+              return (
+                <li key={`item-${itemId}`}>
+                  {item?.name} - {formatPrice(item?.price)} تومان
+                </li>
+              );
+            })}
+          </ul>
+          <button
+            className={styles.closeButton}
+            onClick={() => setSelectedAppointment(null)}
+          >
+            بستن
+          </button>
+        </div>
+      )}
     </div>
   );
 };
